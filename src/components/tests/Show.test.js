@@ -6,18 +6,56 @@ import Show from './../Show';
 
 const testShow = {
     //add in approprate test data structure here.
+    name:'stranger things',
+    seasons:[
+        {
+            id:0,
+            name:'season 1',
+            episode:[]
+        },
+        {
+            id:1,
+            name:'season 2',
+            episode:[]
+        },
+        {
+            id:2,
+            name:'season 3',
+            episode:[]
+        },
+        {
+            id:3,
+            name:'season 4',
+            episode:[]
+        }
+    ],
+    summary: 'A love letter to the 80s classic',
 }
 
 test('renders testShow and no selected Season without errors', ()=>{
+    render(<Show showTest ={testShow} selectedSeason={'none'}/>)
 });
 
 test('renders Loading component when prop show is null', () => {
+    render(<Show show = {null} />);
+    const fetching  = screen.queryByText(/Fetching data.../i);
+    expect(fetching).toBeInTheDocument();
 });
 
 test('renders same number of options seasons are passed in', ()=>{
+    render(<Show show = {testShow} selectedSeason={'none'}/>);
+    const seasonOptions = screen.queryAllByTestId(/season-option/i);
+    expect(seasonOptions.length).toBe(4);
+    expect(seasonOptions).toHaveLength(4)
 });
 
 test('handleSelect is called when an season is selected', () => {
+    const handleSelectFake = jest.fn();
+    render(<Show show = {testShow} handleSelect = {handleSelectFake} selectedSeason={'none'}/>);
+
+    const selection  = screen.queryByLabelText('seasons');
+    userEvent.selectOptions(selection, ['1']);
+    expect(handleSelectFake).toHaveBeenCalledTimes(1);
 });
 
 test('component renders when no seasons are selected and when rerenders with a season passed in', () => {
