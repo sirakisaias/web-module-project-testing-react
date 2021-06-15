@@ -1,14 +1,34 @@
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
+import Display  from '../Display';
 
+test('Display renders ', ()=>{
+    render(<Display/>)
+});
 
+const testShow = {
+    name:'',
+    seasons:[
+        {id:0, name:'season 1', episode:[]},
+        {id:1, name:'season 2', episode:[]},
+        {id:2, name:'season 3', episode:[]},
+        { id:3, name:'season 4', episode:[]}
+    ],
+    summary: '',
+};
 
+test('fetch button pressed', ()=>{
+    render(<Display show = {testShow}/>);
+    const button = screen.queryByRole('button');
 
-
-
-
-
-
-
+    userEvent.click(button);
+    await waitFor(()=>{
+        const displaying = screen.queryAllByTestId('show-container');
+        expect(displaying).toBeTruthy();
+    })
+});
 
 
 
